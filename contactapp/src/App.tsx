@@ -1,13 +1,23 @@
+import 'react-native-gesture-handler';
+
 import React from 'react';
 import { StatusBar } from 'react-native';
 
+import { NavigationContainer } from '@react-navigation/native';
+
 import LinearGradient from 'react-native-linear-gradient';
+
+import Routes from './routes';
 
 const App: React.FC = () => {
   return (
-    <LinearGradient style={{ flex: 1 }} colors={['#FF8292', '#6B70C2']}>
-      <StatusBar barStyle="light-content" backgroundColor="#FF8292" />
-    </LinearGradient>
+    <NavigationContainer>
+      <LinearGradient style={{ flex: 1 }} colors={['#FF8292', '#6B70C2']}>
+        <StatusBar barStyle="light-content" backgroundColor="#FF8292" />
+
+        <Routes />
+      </LinearGradient>
+    </NavigationContainer>
   );
 };
 
