@@ -32,7 +32,7 @@ const SignIn: React.FC = () => {
         contentContainerStyle={{ flex: 1}}
         keyboardShouldPersistTaps="handled"
       >
-        <Container style={{ flex: 1 }} colors={['#FF8292', '#6B70C2']}>
+        <Container colors={['#FF8292', '#6B70C2']}>
           <Logo>Contatos</Logo>
 
             <View>
