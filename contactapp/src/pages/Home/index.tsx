@@ -1,6 +1,8 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import Icon from 'react-native-vector-icons/Feather';
 
 import avatar from '../../assets/avatarfe.jpg';
@@ -16,6 +18,7 @@ import {
  } from './styles';
 
 const Home: React.FC = () => {
+  const { navigate } = useNavigation();
   return (
     <Container colors={['#FF8292', '#6B70C2']}>
       <CreateContactButton>
@@ -24,7 +27,7 @@ const Home: React.FC = () => {
       </CreateContactButton>
 
       <ScrollView>
-        <Contact>
+        <Contact onPress={() => navigate('Info')}>
           <ContactIndex>1</ContactIndex>
           <ContactImage source={avatar} />
           <ContactName>Maria</ContactName>
