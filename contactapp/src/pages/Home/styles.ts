@@ -31,7 +31,7 @@ export const Contact = styled(RectButton)`
 export const ContactIndex = styled.Text`
   font-family: 'RobotoSlab-Regular';
   font-size: 24px;
-  color: #c0bbbb;
+  color: #FFF;
   margin-right: 38px;
 `;
 

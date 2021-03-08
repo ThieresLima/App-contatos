@@ -23,7 +23,9 @@ const Home: React.FC = () => {
     <Container colors={['#FF8292', '#6B70C2']}>
       <CreateContactButton>
         <Icon name="user-plus" color="#FFF" size={24} />
-        <CreateContactButtonText>Criar novo contato</CreateContactButtonText>
+        <CreateContactButtonText onPress={() => navigate('NewContact')}>
+          Criar novo contato
+        </CreateContactButtonText>
       </CreateContactButton>
 
       <ScrollView>

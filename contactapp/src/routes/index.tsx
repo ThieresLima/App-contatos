@@ -5,6 +5,7 @@ import SignIn from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import Home from '../pages/Home';
 import Info from '../pages/Info';
+import NewContact from '../pages/NewContact';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -31,6 +32,10 @@ const AuthRoutes: React.FC = () => (
     <Screen
       name="Info"
       component={Info}
+    />
+    <Screen
+      name="NewContact"
+      component={NewContact}
     />
   </Navigator>
 );

@@ -50,7 +50,7 @@ const Info: React.FC = () => {
 
         <OptionButton>
           <MaterialIcon name="email" color="#FFF" size={31} />
-          <OptionText>Email</OptionText>
+          <OptionText>E-mail</OptionText>
         </OptionButton>
 
         <OptionButton>
