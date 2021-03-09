@@ -12,6 +12,9 @@ class Contact {
   number: string;
 
   @Column()
+  email: string;
+
+  @Column()
   avatar: string;
 
   @Column()

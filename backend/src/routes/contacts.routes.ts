@@ -4,6 +4,8 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 import CreateContactService from '../services/CreateContactService';
 import GetContactUserService from '../services/GetContactUserService';
+import UpdateContactService from '../services/UpdateContactService';
+import DeleteContactService from '../services/DeleteContactService';
 
 const contactsRouter = Router();
 
@@ -15,6 +17,7 @@ contactsRouter.post('/', async (req, res) => {
     const {
       name,
       number,
+      email,
       avatar,
     } = req.body;
 
@@ -25,6 +28,7 @@ contactsRouter.post('/', async (req, res) => {
     const contact = await contactService.execute({
       name,
       number,
+      email,
       avatar,
       user_id
     });
@@ -49,6 +53,49 @@ contactsRouter.get('/', async (req, res) => {
     res.status(200).json(contact);
   } catch(err) {
     res.status(401).json({message: err.message});
+  }
+});
+
+contactsRouter.put('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const {
+      name,
+      number,
+      email,
+      avatar,
+    } = req.body;
+
+    const updateContact = new UpdateContactService();
+
+    const contact = await updateContact.execute({
+      id,
+      name,
+      number,
+      email,
+      avatar,
+    });
+
+    res.status(200).json(contact)
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+contactsRouter.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleteContact = new DeleteContactService();
+
+    await deleteContact.execute({
+      id
+    });
+
+  res.status(200).json({ message: 'Deleted contact' });
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 

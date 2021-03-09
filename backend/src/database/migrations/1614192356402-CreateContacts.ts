@@ -23,6 +23,10 @@ export class CreateContacts1614192356402 implements MigrationInterface {
             isUnique: true,
           },
           {
+            name: 'email',
+            type: 'varchar',
+          },
+          {
             name: 'avatar',
             type: 'varchar',
             isNullable: true,

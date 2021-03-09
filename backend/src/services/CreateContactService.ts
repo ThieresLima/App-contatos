@@ -6,6 +6,7 @@ import ContactsRepository from '../repositories/ContactsRepository';
 interface IRequest {
   name: string;
   number: string;
+  email: string;
   avatar?: string;
   user_id: string;
 }
@@ -14,6 +15,7 @@ export default class CreateContactService {
   public async execute({
     name,
     number,
+    email,
     avatar,
     user_id
   }: IRequest): Promise<Contact> {
@@ -25,9 +27,14 @@ export default class CreateContactService {
       throw new Error("Contact already exists");
     }
 
+    if (!avatar) {
+      avatar = 'https://cdn4.iconfinder.com/data/icons/basic-interface-overcolor/512/user-512.png'
+    }
+
     const contact = contactRepository.create({
       name,
       number,
+      email,
       avatar,
       user_id
     });
