@@ -5,6 +5,8 @@ import { StatusBar } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 
+import { AuthProvider } from './context/AuthProvider';
+
 import LinearGradient from 'react-native-linear-gradient';
 
 import Routes from './routes';
@@ -14,8 +16,9 @@ const App: React.FC = () => {
     <NavigationContainer>
       <LinearGradient style={{ flex: 1 }} colors={['#FF8292', '#6B70C2']}>
         <StatusBar barStyle="light-content" backgroundColor="#FF8292" />
-
-        <Routes />
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
       </LinearGradient>
     </NavigationContainer>
   );
