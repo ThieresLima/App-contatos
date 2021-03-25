@@ -6,6 +6,7 @@ import CreateContactService from '../services/CreateContactService';
 import GetContactUserService from '../services/GetContactUserService';
 import UpdateContactService from '../services/UpdateContactService';
 import DeleteContactService from '../services/DeleteContactService';
+import GetByIdContactService from '../services/GetByIdContactService';
 
 const contactsRouter = Router();
 
@@ -53,6 +54,22 @@ contactsRouter.get('/', async (req, res) => {
     res.status(200).json(contact);
   } catch(err) {
     res.status(401).json({message: err.message});
+  }
+});
+
+contactsRouter.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const GetById = new GetByIdContactService();
+
+    const contact = await GetById.execute({
+      id
+    });
+
+  res.status(200).json(contact);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
 });
 
