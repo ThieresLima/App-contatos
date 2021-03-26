@@ -8,7 +8,7 @@ interface TokenPayload {
   sub: string;
 }
 
-export default function unsureAuthenticated(
+export default function ensureAuthenticated(
   req: Request,
   res: Response,
   next: NextFunction): void {

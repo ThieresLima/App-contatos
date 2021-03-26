@@ -7,8 +7,24 @@ export const Container = styled(LinearGradient)`
   width: 100%;
 `;
 
+export const Header = styled.View``;
+
+export const LogoutButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-self: flex-end;
+
+  padding: 5px;
+`;
+
+export const LogoutText = styled.Text`
+  font-family: 'RobotoSlab-Regular';
+  font-size: 18px;
+  color: #FFF;
+  margin-left: 4px;
+`;
+
 export const CreateContactButton = styled.View`
-  height: 80px;
+  height: 60px;
   flex-direction: row;
   align-items: center;
   justify-content: center;

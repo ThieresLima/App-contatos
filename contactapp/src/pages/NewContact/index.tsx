@@ -1,6 +1,9 @@
-import React from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+// import { StackNavigationProp } from '@react-navigation/stack';
+
+import { useContact } from '../../hooks/Contact';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -20,7 +23,43 @@ import {
  } from './styles';
 
 const NewContact: React.FC = () => {
-  const { goBack } = useNavigation();
+  const [avatar, setAvatar] = useState('');
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [number, setNumber] = useState('');
+  const [email, setEmail] = useState('');
+
+  const { createContact } = useContact();
+  const { navigate } = useNavigation();
+  // const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const onCreate = useCallback( async () => {
+    if (!name ||!number) {
+      Alert.alert(
+        'Cheque se os campos estão preechidos.',
+      );
+      return;
+    }
+    try {
+      const response = await createContact({
+        avatar,
+        name: `${name} ${lastName}`,
+        number,
+        email,
+      });
+
+      navigate('Info', response);
+
+      Alert.alert(
+        'Contato criado!',
+        'Contato criado com sucesso.'
+      );
+    } catch (err) {
+      Alert.alert(
+        'Erro ao criar contato!',
+      );
+    }
+  }, [avatar, name, number, email]); //////////////
 
   return (
     <KeyboardAvoidingView
@@ -34,26 +73,37 @@ const NewContact: React.FC = () => {
         keyboardShouldPersistTaps="handled"
       >
         <Container colors={['#FF8292', '#6B70C2']}>
-          <BackButton onPress={() => goBack()}>
+          <BackButton onPress={() => navigate('Home')}>
             <FeatherIcon name="arrow-left" color="#FFF" size={26} />
           </BackButton>
 
           <ContactImage source={addUser} />
 
           {/* falta upload imagens */}
-          <InputImg />
+          <InputImg
+            value={avatar}
+            onChangeText={avatar => setAvatar(avatar)}
+          />
 
           <InputGroup>
           <MaterialIcon
             name="person-outline" size={35} color="#FFF" />
             <InputContainer>
               <Input
-                placeholder="Nome"
-                placeholderTextColor="#c0bbbb"
+                  autoCapitalize="words"
+                  value={name}
+                  onChangeText={name => setName(name)}
+                  placeholder="Nome"
+                  placeholderTextColor="#c0bbbb"
+                  returnKeyType="next"
               />
               <Input
                 placeholder="Sobrenome"
                 placeholderTextColor="#c0bbbb"
+                autoCapitalize="words"
+                value={lastName}
+                onChangeText={lastName => setLastName(lastName)}
+                returnKeyType="next"
               />
             </InputContainer>
           </InputGroup>
@@ -65,6 +115,10 @@ const NewContact: React.FC = () => {
               <Input
                 placeholder="Número"
                 placeholderTextColor="#c0bbbb"
+                keyboardType="numeric"
+                value={number}
+                onChangeText={number => setNumber(number)}
+                returnKeyType="next"
               />
             </InputContainer>
           </InputGroup>
@@ -74,13 +128,19 @@ const NewContact: React.FC = () => {
 
             <InputContainer>
               <Input
+                autoCorrect={false}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                value={email}
+                onChangeText={email => setEmail(email)}
                 placeholder="E-mail"
                 placeholderTextColor="#c0bbbb"
+                returnKeyType="send"
               />
             </InputContainer>
           </InputGroup>
 
-          <ButtonContainer>
+          <ButtonContainer onPress={onCreate}>
             <ButtonText>Salvar</ButtonText>
           </ButtonContainer>
         </Container>
