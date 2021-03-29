@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   const { navigate } = useNavigation();
   const { contacts } = useContact();
   const { signOut } = useAuth()
-  // console.log(contacts);
+
   return (
     <Container colors={['#FF8292', '#6B70C2']}>
       <Header>
