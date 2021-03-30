@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { StackScreenProps } from '@react-navigation/stack';
+
+import { useContact } from '../../hooks/Contact';
 
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-import avatar from '../../assets/avatarfe.jpg';
 
 import {
   Container,
@@ -25,22 +27,56 @@ import {
   EditText,
  } from './styles';
 
-const Info: React.FC = () => {
-  const { goBack } = useNavigation();
+export interface ContactState {
+  id: string;
+  avatar: string;
+  name: string;
+  number: string;
+  email: string;
+}
+
+type RootStackParamList = {
+  contact: ContactState;
+};
+
+type Props = StackScreenProps<RootStackParamList, 'contact'>;
+
+const Info: React.FC<Props> = ({ route }) => {
+  const { id, avatar, name, number } = route.params;
+
+  const { navigate } = useNavigation();
+  const { deleteContact } = useContact();
+
+  const onDelete = useCallback( async () => {
+    try {
+      await deleteContact(id);
+
+      navigate('Home');
+
+      Alert.alert(
+        'Contato Deletado!'
+      );
+    } catch (e) {
+      console.log(e.message)
+      Alert.alert(
+        'Erro ao deletar contato.'
+      );
+    }
+  }, []);
 
   return (
     <Container colors={['#FF8292', '#6B70C2']}>
-      <BackButton onPress={() => goBack()}>
+      <BackButton onPress={() => navigate('Home')}>
         <FeatherIcon name="arrow-left" color="#FFF" size={26} />
       </BackButton>
 
-      <DeleteButton>
+      <DeleteButton onPress={onDelete}>
         <MaterialIcon name="delete" color="#FFF" size={26} />
       </DeleteButton>
 
-      <ContactImage source={avatar} />
+      <ContactImage source={{ uri: avatar }} />
 
-      <ContactName>Maria</ContactName>
+      <ContactName>{name}</ContactName>
 
       <Option>
         <OptionButton>
@@ -62,7 +98,7 @@ const Info: React.FC = () => {
       <ContainerInfo>
       <FeatherIcon name="phone" color="#FFF" size={30} />
         <InfoContainer>
-          <InfoNumber>99876123</InfoNumber>
+          <InfoNumber>{number}</InfoNumber>
           <CellText>Celular</CellText>
         </InfoContainer>
 
@@ -74,7 +110,7 @@ const Info: React.FC = () => {
         </ContainerIcon>
       </ContainerInfo>
 
-      <EditButton>
+      <EditButton onPress={() => navigate('EditContact', route.params)}>
         <FeatherIcon name="edit" color="#FFF" size={28} />
         <EditText>Editar contato</EditText>
       </EditButton>

@@ -1,7 +1,12 @@
-import React from 'react';
-import { KeyboardAvoidingView, Platform, View, ScrollView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import {
+  KeyboardAvoidingView,
+  Platform, View, ScrollView,
+  Alert
+} from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../hooks/Auth';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -19,7 +24,32 @@ import {
 } from './styles';
 
 const SignIn: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const { navigate } = useNavigation();
+  const { signIn } = useAuth();
+
+  const handleSignIn = useCallback( async () => {
+    if (!email ||!password) {
+      Alert.alert(
+        'Cheque se os campos estão preechidos.',
+      );
+      return;
+    }
+
+    try {
+      await signIn({
+        email,
+        password
+      });
+    } catch (err) {
+      Alert.alert(
+        'Erro na autenticação',
+        'Ocorreu um erro ao fazer login, cheque as credenciais.',
+      );
+    }
+  }, [signIn, email, password]);
 
   return (
     <>
@@ -40,6 +70,8 @@ const SignIn: React.FC = () => {
             </View>
 
             <Input
+              value={email}
+              onChangeText={email => setEmail(email)}
               autoCorrect={false}
               autoCapitalize="none"
               keyboardType="email-address"
@@ -50,6 +82,8 @@ const SignIn: React.FC = () => {
             />
 
             <Input
+              value={password}
+              onChangeText={password => setPassword(password)}
               name="password"
               icon="lock"
               placeholder="Senha"
@@ -57,7 +91,7 @@ const SignIn: React.FC = () => {
               returnKeyType="send"
             />
 
-          <Button>Entrar</Button>
+          <Button onPress={handleSignIn}>Entrar</Button>
 
           <ForgotPassword>
             <ForgotPasswordText>
