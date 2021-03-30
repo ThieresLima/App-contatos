@@ -32,17 +32,19 @@ export const UserContactProvider: React.FC = ({ children }) => {
   useEffect(() => {
     async function loadUserContact() {
         try {
-          const contactExists = await AsyncStorage.getItem('@ContactApp:contact');
+          if (user) {
+            const contactExists = await AsyncStorage.getItem('@ContactApp:contact');
 
-          if (contactExists) {
-            setData(JSON.parse(contactExists));
-            return;
+            if (contactExists) {
+              setData(JSON.parse(contactExists));
+              return;
+            }
+
+            const response = await api.get('/contacts');
+
+            await AsyncStorage.setItem('@ContactApp:contact', JSON.stringify(response.data));
+            setData(response.data);
           }
-
-          const response = await api.get('/contacts');
-
-          await AsyncStorage.setItem('@ContactApp:contact', JSON.stringify(response.data));
-          setData(response.data);
         } catch {}
     }
     loadUserContact();

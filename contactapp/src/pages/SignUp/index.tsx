@@ -1,7 +1,9 @@
-import React from 'react';
-import { KeyboardAvoidingView, Platform, View, ScrollView } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { KeyboardAvoidingView, Platform, View, ScrollView, Alert } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
+
+import api from '../../service/api';
 
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -17,7 +19,41 @@ import {
 } from './styles';
 
 const SignUp: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const { goBack } = useNavigation();
+
+  const handleSignUp = useCallback(async () => {
+    try {
+      if (!name ||!email ||!password) {
+        Alert.alert(
+          'Cheque se os campos estão preechidos.',
+        );
+        return;
+      }
+      console.log('oooooook')
+      await api.post('users', {
+        name,
+        email,
+        password,
+      });
+
+      Alert.alert(
+        'Cadastro realizado com sucesso!',
+        'Você já pode fazer login na aplicação',
+      );
+
+      goBack();
+    } catch (err) {
+      Alert.alert(
+        'Erro no cadastro',
+        'Ocorreu um erro ao fazer cadastro, tente novamente.',
+      );
+    }
+    },[goBack, name, email, password],
+  );
 
   return (
     <>
@@ -38,6 +74,8 @@ const SignUp: React.FC = () => {
             </View>
 
             <Input
+              value={name}
+              onChangeText={name => setName(name)}
               autoCapitalize="words"
               name="name"
               icon="user"
@@ -46,6 +84,8 @@ const SignUp: React.FC = () => {
             />
 
             <Input
+              value={email}
+              onChangeText={email => setEmail(email)}
               autoCorrect={false}
               autoCapitalize="none"
               keyboardType="email-address"
@@ -56,6 +96,8 @@ const SignUp: React.FC = () => {
             />
 
             <Input
+              value={password}
+              onChangeText={password => setPassword(password)}
               secureTextEntry
               name="password"
               icon="lock"
@@ -63,7 +105,7 @@ const SignUp: React.FC = () => {
               returnKeyType="send"
             />
 
-          <Button>Entrar</Button>
+          <Button onPress={handleSignUp}>Entrar</Button>
 
         </Container>
       </ScrollView>
