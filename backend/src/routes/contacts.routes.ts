@@ -4,6 +4,7 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 import CreateContactService from '../services/CreateContactService';
 import GetContactUserService from '../services/GetContactUserService';
+import GetByIdContactService from '../services/GetByIdContactService';
 import UpdateContactService from '../services/UpdateContactService';
 import DeleteContactService from '../services/DeleteContactService';
 
@@ -48,6 +49,22 @@ contactsRouter.get('/', async (req, res) => {
 
     const contact = await getContactUser.execute({
       user_id
+    });
+
+    res.status(200).json(contact);
+  } catch(err) {
+    res.status(401).json({message: err.message});
+  }
+});
+
+contactsRouter.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const getById = new GetByIdContactService();
+
+    const contact = await getById.execute({
+      id
     });
 
     res.status(200).json(contact);
