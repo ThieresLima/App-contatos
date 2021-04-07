@@ -59,7 +59,14 @@ export const UserContactProvider: React.FC = ({ children }) => {
         email,
       });
 
-      const newData = [response.data, ...data];
+      let newData = [...data, response.data];
+
+      newData.sort(function compare(a: ContactState, b: ContactState) {
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+      });
+
       setData(newData);
       // setData((state: any) => [response.data,...state]);
 

@@ -40,10 +40,20 @@ const NewContact: React.FC = () => {
       );
       return;
     }
+
+    function toUpperFirstChar(str: string) {
+      const strToUpper = str.charAt(0).toUpperCase() + str.substr(1);
+
+      return strToUpper;
+    }
+
+    const strName = toUpperFirstChar(name);
+    const strLastName = toUpperFirstChar(lastName);
+
     try {
       const response = await createContact({
         avatar,
-        name: `${name} ${lastName}`,
+        name: `${strName} ${strLastName}`,
         number,
         email,
       });
@@ -59,7 +69,7 @@ const NewContact: React.FC = () => {
         'Erro ao criar contato!',
       );
     }
-  }, [avatar, name, number, email]); //////////////
+  }, [avatar, name, lastName, number, email]); //////////////
 
   return (
     <KeyboardAvoidingView
